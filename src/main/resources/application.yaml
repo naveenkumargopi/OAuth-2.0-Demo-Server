@@ -1,0 +1,34 @@
+#Manual client registration which will be used by OAuth 2.0 Authorization Server
+#This manual client registration needs to be replaced with proper Client Registration screen in the OAuth Server UI   
+security:
+  oauth2:
+    client:
+      client-id: oauthClient
+      client-secret: oauthClientSecret123
+      scope: read,write
+      auto-approve-scopes: '.*'
+
+      
+#The default prefix for spring oauth2 configuration are security.oauth2.client & security.oauth2.resource
+facebook:
+  authorizationServer:
+    clientId: 233668646673605
+    clientSecret: 33b17e044ee6a4fa383f46ec6e28ea1d
+    accessTokenUri: https://graph.facebook.com/oauth/access_token
+    userAuthorizationUri: https://www.facebook.com/dialog/oauth
+    tokenName: oauth_token
+    authenticationScheme: query
+    clientAuthenticationScheme: form
+  resourceServer:
+    userInfoUri: https://graph.facebook.com/me
+      
+github:
+  authorizationServer:
+    clientId: bd1c0a783ccdd1c9b9e4
+    clientSecret: 1a9030fbca47a5b2c28e92f19050bb77824b5ad1
+    accessTokenUri: https://github.com/login/oauth/access_token
+    userAuthorizationUri: https://github.com/login/oauth/authorize
+    clientAuthenticationScheme: form
+  resourceServer:
+    userInfoUri: https://api.github.com/user
+      
