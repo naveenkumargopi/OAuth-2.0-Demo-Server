@@ -1,6 +1,7 @@
 <!doctype html>
 <html lang="en">
 <head>
+	<!-- <sec:csrfMetaTags/> -->
     <meta charset="utf-8"/>
     <meta http-equiv="X-UA-Compatible" content="IE=edge"/>
     <title>Demo</title>
@@ -10,7 +11,7 @@
     <link rel="stylesheet" type="text/css" href="/webjars/bootstrap/css/bootstrap.min.css"/>
     <script type="text/javascript" src="/webjars/jquery/jquery.min.js"></script>
     <script type="text/javascript" src="/webjars/bootstrap/js/bootstrap.min.js"></script>
-    <script type="text/javascript" src="/webjars/js-cookie/js.cookie.js"></script>
+    <script type="text/javascript" src="https://thumbsignin.com/thumbsign_widget.js"></script>
 </head>
 <body>
     <h3>Thumbsignin OAuth 2.0 Authorization Server</h3>
@@ -22,47 +23,85 @@
     		With Github: <a href="/login/github">click here</a>
   		</div>
   		<br>
-  		<div>
-    		<a href="/login/github">Login via ThumbSignin</a>
-  		</div>
-  		<div>
-    		<a href="/login/github">Register with ThumbSignin</a>
-  		</div>
 	</div>
 	<div class="container authenticated" style="display:none">
-    	Logged in as: <span id="facebookUser"></span><span id="githubUser"></span>
+    	Logged in as: <span id="user"></span>
     	<div>
     		<button onClick="logout()" class="btn btn-primary">Logout</button>
   		</div>
 	</div>
-	<script type="text/javascript">
+	
+	<div><a href="/login/azuread">Click here if you have not yet registered with ThumbSignin</a></div> <br>
+	<button class="ts-auth-button" id="tsBtn" onclick="login.open()" 
+		style="border: 1px solid rgb(72, 210, 160); background-color: rgb(72, 210, 160);">Login via ThumbSignin
+	</button>
+    <script>
+        (function(){document.write("<style>#tsBtn{color:#fff;border-radius:2px;background-color:#cccccc;width:230px;height:40px;margin-top: 20px;margin-left: 35;outline:0;border:1px solid #cccccc;cursor:pointer;font-size:16px;padding-left:30px;text-transform:none;background-position: 5px;background-image:url('https://thumbsignin.com/styles/img/logoIcon.png');background-repeat:no-repeat}</style>");})();
+    </script> 
+	<div id="loginDiv"></div> 
+	
+	<script type="text/javascript" src="/webjars/js-cookie/js.cookie.js"></script>
+	<script type="text/javascript">	
     	$.get("/user", function(data) {
-        	$("#facebookUser").html(data.userAuthentication.details.name);
-        	$("#githubUser").html(data.userAuthentication.details.login);
+        	//$("#facebookUser").html(data.userAuthentication.details.name);
+        	$("#user").html(data.userInfo.userName);
         	$(".unauthenticated").hide()
         	$(".authenticated").show()
     	});
     	var logout = function() {
-    	    $.post("/logout", function() {
-    	        $("#user").html('');
+    	    /*$.post("/logout", function() {
+    	    	$("#facebookUser").html('');
     	        $(".unauthenticated").show();
     	        $(".authenticated").hide();
     	    })
-    	    return true;
-    	}
-    	$.ajaxSetup({
-    		beforeSend : function(xhr, settings) {
-    		  if (settings.type == 'POST' || settings.type == 'PUT'
-    		      || settings.type == 'DELETE') {
-    		    if (!(/^http:.*/.test(settings.url) || /^https:.*/
-    		        .test(settings.url))) {
-    		      // Only send the token to relative URLs i.e. locally.
-    		      xhr.setRequestHeader("X-XSRF-TOKEN",
-    		          Cookies.get('XSRF-TOKEN'));
+    	    return true;*/
+    		$.ajax({
+    		    url: '/logout',   //url: '/j_spring_security_logout',
+    		    type: 'POST', 
+    		    beforeSend : function(xhr, settings) { 
+    		    	xhr.setRequestHeader("X-XSRF-TOKEN", Cookies.get('XSRF-TOKEN'));  //To be used in POST, PUT & DELETE relative URL requests
+    		    },
+    		    success: function() {
+    		    	$("#user").html('');
+        	        $(".unauthenticated").show();
+        	        $(".authenticated").hide();
     		    }
-    		  }
-    		}
-    	});
+    		});
+    	}
+    	
+    	thumbSignIn
+        .addConfig('LOGIN_WIDGET', {
+            actionUrl: "/ts/secure/authenticate/",
+            statusUrl: "/ts/secure/authStatus/",
+            COMPLETED_SUCCESSFUL: "You have successfully logged in using your fingerprint",
+            DEEP_LINK: "Open in Thumbsignin app",
+            desktop: {
+                'intro-msg': "Scan the QR code above using the ThumbSignIn app on your phone to log in to your account.",
+                TIMEOUT: "Scan the QR code above using the ThumbSignIn app on your phone to log in to your account.",
+            },
+            mobile: {
+                'intro-msg': "",
+                TIMEOUT: "",
+            },
+            sms: {
+                playStoreURL: 'https://play.google.com/store/apps/details?id=com.pramati.thumbsignin.app',
+                appStoreURL: 'https://itunes.apple.com/in/app/thumbsignin/id1279260047',
+                smsContent: 'Please visit this link to download App'
+            }
+        });
+
+    thumbSignIn
+        .init({
+            name: 'login',
+            id: 'LOGIN_WIDGET',
+            rootID: 'loginDiv'
+        }).then(function () {
+            login.registerEvent('SUCCESS', function (response) {
+                window.location.hash = '';
+                window.location.pathname = response.redirectUrl || "/";
+            }, window);
+            login.close();
+        });
 	</script>
 </body>
 </html>

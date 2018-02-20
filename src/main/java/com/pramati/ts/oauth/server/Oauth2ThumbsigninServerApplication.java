@@ -42,6 +42,9 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.filter.CompositeFilter;
 
+import com.pramati.ts.oauth.server.domain.UserInfo;
+
+
 @SpringBootApplication
 @RestController
 //@EnableOAuth2Sso  //This can be used for auto configuration of OAuth2 client
@@ -54,10 +57,13 @@ public class Oauth2ThumbsigninServerApplication extends WebSecurityConfigurerAda
 	OAuth2ClientContext oauth2ClientContext;
 	
 	@RequestMapping({"/user", "/me"})
-	public Map<String, String> user(OAuth2Authentication authentication) {
-		Map<String, String> map = new LinkedHashMap<>();
-		//map.put("name", ((OAuth2Authentication) authentication.getUserAuthentication()).getUserAuthentication().getDetails().toString());
-		map.put("name", authentication.getName());
+	public Map<String, Object> user(OAuth2Authentication authentication) {		
+		UserInfo userInfo = new UserInfo();
+		userInfo.setUserName(authentication.getName());
+		
+		Map<String, Object> map = new LinkedHashMap<>();
+		//map.put("name", ((OAuth2Authentication) authentication.getUserAuthentication()).getUserAuthentication().getDetails().toString());		
+		map.put("userInfo", userInfo);
 		return map;
 	}
 	
@@ -82,13 +88,14 @@ public class Oauth2ThumbsigninServerApplication extends WebSecurityConfigurerAda
 	@Override
 	protected void configure(HttpSecurity http) throws Exception {
 	    http
+	      //.csrf().disable() //To disable CSRF which is enabled by default by spring security
 	      .antMatcher("/**")  //All requests are protected by default
 	        .authorizeRequests()
-	           .antMatchers("/", "/login**", "/webjars/**").permitAll()  //The home(index) page and login endpoints are explicitly excluded
+	           .antMatchers("/", "/login**", "/ts/**", "/home**", "/webjars/**").permitAll()  //The home(index) page, login and ts endpoints are explicitly excluded
 	           .anyRequest().authenticated()  //All other endpoints require an authenticated user
-	        .and().exceptionHandling().authenticationEntryPoint(new LoginUrlAuthenticationEntryPoint("/"))  //Unauthenticated users are re-directed to the home page
+	        .and().exceptionHandling().authenticationEntryPoint(new LoginUrlAuthenticationEntryPoint("/"))  //Unauthenticated users are re-directed to the home page	        
 	        .and().logout().logoutSuccessUrl("/").permitAll()
-	        .and().csrf().csrfTokenRepository(CookieCsrfTokenRepository.withHttpOnlyFalse())
+	        .and().csrf().csrfTokenRepository(CookieCsrfTokenRepository.withHttpOnlyFalse()) //Adding CSRF filter which will generate the XSRF-TOKEN cookie to prevent CSRF attacks (CSRF needs to be enabled)
 	        .and().addFilterBefore(ssoFilter(), BasicAuthenticationFilter.class);
 	}
 	
