@@ -22,10 +22,10 @@ import com.pramati.thumbsignin.servlet.sdk.TransactionStatus;
 public class ThumbsigninApiService {
 		
 	//@Value("${client.authenticationSuccess.redirect.url}")
-    private String authSuccessClientRedirectUrl = "http://localhost:9999";
+    private String authSuccessClientRedirectUrl = "/oauth-ts/loginSuccess";
 	
 	//@Value("${client.registrationSuccess.redirect.url}")
-    private String registrationSuccessClientRedirectUrl = "http://localhost:9999";
+    private String registrationSuccessClientRedirectUrl = "/oauth-ts/regSuccess";
 	
 	//@Value("${client.accessDenied.redirect.url}")
     //private String accessDeniedClientRedirectUrl;

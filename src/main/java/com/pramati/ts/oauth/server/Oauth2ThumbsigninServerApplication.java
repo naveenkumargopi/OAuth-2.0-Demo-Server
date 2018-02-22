@@ -91,7 +91,7 @@ public class Oauth2ThumbsigninServerApplication extends WebSecurityConfigurerAda
 	      //.csrf().disable() //To disable CSRF which is enabled by default by spring security
 	      .antMatcher("/**")  //All requests are protected by default
 	        .authorizeRequests()
-	           .antMatchers("/", "/login**", "/ts/**", "/home**", "/webjars/**").permitAll()  //The home(index) page, login and ts endpoints are explicitly excluded
+	           .antMatchers("/", "/login**", "/ts/**", "/oauth-ts/**", "/webjars/**").permitAll()  //The home(index) page, login and ts endpoints are explicitly excluded
 	           .anyRequest().authenticated()  //All other endpoints require an authenticated user
 	        .and().exceptionHandling().authenticationEntryPoint(new LoginUrlAuthenticationEntryPoint("/"))  //Unauthenticated users are re-directed to the home page	        
 	        .and().logout().logoutSuccessUrl("/").permitAll()
@@ -104,11 +104,21 @@ public class Oauth2ThumbsigninServerApplication extends WebSecurityConfigurerAda
 		  List<Filter> filters = new ArrayList<>();
 		  filters.add(ssoFilter(facebook(), "/login/facebook"));
 		  filters.add(ssoFilter(github(), "/login/github"));
+		  //filters.add(createFilterForThumbSigninLogin("/oauth-ts/loginSuccess"));
 		  compositeFilter.setFilters(filters);
 		  return compositeFilter;
     }
 	
+	private Filter createFilterForThumbSigninLogin(String path) {
+		System.out.println("After ThumbSignin Login..");
+		return null;
+	}
+	
 	private Filter ssoFilter(OAuthProviderInfo oAuthProvider, String path) {
+		  /*
+		   * An OAuth2 client filter can be used to acquire an OAuth2 access token from an authorization server, and load an
+		   * authentication object into the SecurityContext
+		   */
 		  OAuth2ClientAuthenticationProcessingFilter filter = new OAuth2ClientAuthenticationProcessingFilter(path);
 		  OAuth2RestTemplate template = new OAuth2RestTemplate(oAuthProvider.getAuthorizationServer(), oauth2ClientContext);
 		  filter.setRestTemplate(template);
