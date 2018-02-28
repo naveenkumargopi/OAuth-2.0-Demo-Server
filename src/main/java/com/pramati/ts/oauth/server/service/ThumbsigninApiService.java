@@ -8,6 +8,7 @@ import javax.servlet.http.HttpServletRequest;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
@@ -22,10 +23,10 @@ import com.pramati.thumbsignin.servlet.sdk.TransactionStatus;
 public class ThumbsigninApiService {
 		
 	//@Value("${client.authenticationSuccess.redirect.url}")
-    private String authSuccessClientRedirectUrl = "/oauth-ts/loginSuccess";
+    private String authSuccessClientRedirectUrl = "/ts/secure/loginSuccess";
 	
 	//@Value("${client.registrationSuccess.redirect.url}")
-    private String registrationSuccessClientRedirectUrl = "/oauth-ts/regSuccess";
+    private String registrationSuccessClientRedirectUrl = "/ts/secure/regSuccess";
 	
 	//@Value("${client.accessDenied.redirect.url}")
     //private String accessDeniedClientRedirectUrl;
@@ -134,7 +135,8 @@ public class ThumbsigninApiService {
         				//thumbsignInResponse.getData().put("userNameFromAzure", userName);
         				thumbsignInResponse.getData().put(REDIRECT_URL, authSuccessClientRedirectUrl);
         				//thumbsignInResponse.getData().put(REDIRECT_URL, authSuccessClientRedirectUrl.replace(USER_ID_QUERY_PARAM, thumbsignin_UserId));
-    				//}    				
+    				//}
+        			setUserAuthenticationInContext(thumbsignin_UserId);
     			} else {
     				thumbsignInResponse.getData().put(REDIRECT_URL, registrationSuccessClientRedirectUrl);
     			}
@@ -145,6 +147,16 @@ public class ThumbsigninApiService {
     
     private void clearStatusRequestType() {
     	statusRequestType = "";
+    }
+    
+    public void setUserAuthenticationInContext(String userId) {
+    	UsernamePasswordAuthenticationToken authenticationToken = new UsernamePasswordAuthenticationToken(
+    			userId, "N/A", null);
+		authenticationToken.setDetails("ThumbSignIn Registered User");
+		if(authenticationToken.isAuthenticated()) {
+			SecurityContextHolder.getContext().setAuthentication(authenticationToken);
+		}
+		
     }
 
 }
