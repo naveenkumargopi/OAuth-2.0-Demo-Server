@@ -38,11 +38,11 @@ public class ThumbsigninApiController {
 		String apiKey = "f825fccb97b541989858c233576df0bc";
 		String apiSecret = "7c02776988b395f7cbedded756eb71c65e8fca41619fa77f85433f4bdb709f29";
 		
-		//thumbsigninResponseStr = thumbsigninApiService.processThumbsigninRequest(servletRequest, apiKey, apiSecret);
+		thumbsigninResponseStr = thumbsigninApiService.processThumbsigninRequest(servletRequest, apiKey, apiSecret);
 		
-		thumbsigninResponseStr = "{\"transactionId\":\"48df89eb2559c8c5858e2a7b4645518a3ba98543069c508\",\"status\":\"COMPLETED_SUCCESSFUL\",\"expireInSeconds\":\"67\",\"userId\":\"814944a8-4e01-49ad-8711-235e6021cbfe\",\"redirectUrl\":\"/ts/secure/loginSuccess\"}";
+		/*thumbsigninResponseStr = "{\"transactionId\":\"48df89eb2559c8c5858e2a7b4645518a3ba98543069c508\",\"status\":\"COMPLETED_SUCCESSFUL\",\"expireInSeconds\":\"67\",\"userId\":\"814944a8-4e01-49ad-8711-235e6021cbfe\",\"redirectUrl\":\"/ts/secure/loginSuccess\"}";
 		if (servletRequest.getServletPath().contains("authStatus"))
-			thumbsigninApiService.setUserAuthenticationInContext("814944a8-4e01-49ad-8711-235e6021cbfe");
+			thumbsigninApiService.setUserAuthenticationInContext("814944a8-4e01-49ad-8711-235e6021cbfe");*/
 		
 		return thumbsigninResponseStr;
     	
@@ -54,8 +54,19 @@ public class ThumbsigninApiController {
 		//Spring automatically stores the original request in the session
 		//Redirecting the user to the path they were originally trying to access
 		DefaultSavedRequest savedRequest = (DefaultSavedRequest)session.getAttribute("SPRING_SECURITY_SAVED_REQUEST");
-		String redirectUrl = savedRequest.getRedirectUrl();
+		String redirectUrl = "";
+		if (savedRequest != null) {
+			redirectUrl = savedRequest.getRedirectUrl();
+		} else {
+			redirectUrl = "/ts/secure/defaultPage";
+		}		
 		return "redirect:"+redirectUrl;
+	}
+	
+	@RequestMapping("/defaultPage")
+	@ResponseBody
+	public String defaultPage() {
+		return "You have successfully logged in via ThumbSignIn";
 	}
 	
 }

@@ -29,7 +29,7 @@ import com.pramati.ts.oauth.server.security.HmacSignatureBuilder;
 
 
 //The "/me" path is protected with the access token by declaring that  
-	//our OAuth app is a Resource Server (as well as an Authorization Server)
+//our OAuth app is a Resource Server (in addition to being an Authorization Server)
 @Configuration
 @EnableResourceServer
 @RestController
