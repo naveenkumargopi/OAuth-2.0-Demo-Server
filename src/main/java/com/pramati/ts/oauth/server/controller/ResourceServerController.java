@@ -51,15 +51,29 @@ public class ResourceServerController extends ResourceServerConfigurerAdapter {
 	@RequestMapping({"/me"})
 	public String userInfo(OAuth2Authentication authentication) throws ClientProtocolException, URISyntaxException, IOException {		
 		String thumbSignInUserId = authentication.getUserAuthentication().getName();
-		String userRolesApiResponse = invokeTSAADGatewayAPI("getUserRolesFromAzureAD", thumbSignInUserId);
-		String userNameApiResponse = invokeTSAADGatewayAPI("getUserNameFromAzureAD", thumbSignInUserId);
-		JSONArray userMemberships = new JSONArray(userRolesApiResponse);
-		processUserMembershipData(userMemberships);		
-		
 		JSONObject userData = new JSONObject();
-		userData.put("userMembership", userMemberships);
-		userData.put("userid", thumbSignInUserId);
-		userData.put("username", userNameApiResponse);		
+		
+		if (thumbSignInUserId.startsWith("OAuth")) {
+			JSONArray userMemberships = new JSONArray();
+			JSONObject userMembershipJSONObject = new JSONObject();
+			userMembershipJSONObject.put("name", "Manager");
+            userMemberships.put(userMembershipJSONObject);
+            JSONObject userMembershipJSONObject2 = new JSONObject();
+			userMembershipJSONObject2.put("name", "HR");
+            userMemberships.put(userMembershipJSONObject2);
+			userData.put("userMembership", userMemberships);
+			userData.put("userid", thumbSignInUserId.replace("OAuth", ""));
+		} else {
+			String userRolesApiResponse = invokeTSAADGatewayAPI("getUserRolesFromAzureAD", thumbSignInUserId);
+			String userNameApiResponse = invokeTSAADGatewayAPI("getUserNameFromAzureAD", thumbSignInUserId);
+			JSONArray userMemberships = new JSONArray(userRolesApiResponse);
+			processUserMembershipData(userMemberships);		
+						
+			userData.put("userMembership", userMemberships);
+			userData.put("userid", thumbSignInUserId);
+			userData.put("username", userNameApiResponse);
+		}
+				
 		return userData.toString();
 	}
 	

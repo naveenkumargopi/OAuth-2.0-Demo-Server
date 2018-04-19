@@ -35,9 +35,11 @@ public class ThumbsigninApiController {
 		String thumbsigninResponseStr = "";
 		//String apiKey = authentication.getPrincipal().toString();
 		//String apiSecret = authentication.getCredentials().toString();
-		String apiKey = "f825fccb97b541989858c233576df0bc";
-		String apiSecret = "7c02776988b395f7cbedded756eb71c65e8fca41619fa77f85433f4bdb709f29";
-		
+		//String apiKey = "f825fccb97b541989858c233576df0bc";
+		//String apiSecret = "7c02776988b395f7cbedded756eb71c65e8fca41619fa77f85433f4bdb709f29";
+		String apiKey = "3322486d41784e19bd3b4faa526a76ed";
+		String apiSecret = "6d91efa1e5c882ea3ea4538c24517aaee200368f404b3e1fe9fc979f2b75c6c0";
+				
 		thumbsigninResponseStr = thumbsigninApiService.processThumbsigninRequest(servletRequest, apiKey, apiSecret);
 		
 		/*thumbsigninResponseStr = "{\"transactionId\":\"48df89eb2559c8c5858e2a7b4645518a3ba98543069c508\",\"status\":\"COMPLETED_SUCCESSFUL\",\"expireInSeconds\":\"67\",\"userId\":\"814944a8-4e01-49ad-8711-235e6021cbfe\",\"redirectUrl\":\"/ts/secure/loginSuccess\"}";
@@ -48,7 +50,7 @@ public class ThumbsigninApiController {
     	
 	}
 	
-	@RequestMapping("/loginSuccess")
+	@RequestMapping(value = { "/loginSuccess", "/registrationSuccess"})
 	public String handleThumbSigninLoginSuccess(HttpServletRequest request) {
 		HttpSession session = request.getSession();
 		//Spring automatically stores the original request in the session
@@ -57,16 +59,22 @@ public class ThumbsigninApiController {
 		String redirectUrl = "";
 		if (savedRequest != null) {
 			redirectUrl = savedRequest.getRedirectUrl();
-		} else {
-			redirectUrl = "/ts/secure/defaultPage";
+		} else {			
+			redirectUrl = (request.getRequestURI().contains("loginSuccess"))?"/ts/secure/authSuccessPage":"/ts/secure/regSuccessPage";
 		}		
 		return "redirect:"+redirectUrl;
 	}
 	
-	@RequestMapping("/defaultPage")
+	@RequestMapping("/authSuccessPage")
 	@ResponseBody
-	public String defaultPage() {
-		return "You have successfully logged in via ThumbSignIn";
+	public String authSuccessPage() {
+		return "You have successfully authenticated via ThumbSignIn";
+	}
+	
+	@RequestMapping("/regSuccessPage")
+	@ResponseBody
+	public String regSuccessPage() {
+		return "You have successfully registered via ThumbSignIn";
 	}
 	
 }

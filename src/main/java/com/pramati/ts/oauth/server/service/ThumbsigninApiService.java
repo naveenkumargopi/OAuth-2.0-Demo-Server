@@ -3,6 +3,7 @@ package com.pramati.ts.oauth.server.service;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Random;
 
 import javax.servlet.http.HttpServletRequest;
 
@@ -26,7 +27,7 @@ public class ThumbsigninApiService {
     private String authSuccessClientRedirectUrl = "/ts/secure/loginSuccess";
 	
 	//@Value("${client.registrationSuccess.redirect.url}")
-    private String registrationSuccessClientRedirectUrl = "/ts/secure/regSuccess";
+    private String registrationSuccessClientRedirectUrl = "/ts/secure/registrationSuccess";
 	
 	//@Value("${client.accessDenied.redirect.url}")
     //private String accessDeniedClientRedirectUrl;
@@ -102,7 +103,12 @@ public class ThumbsigninApiService {
             }
             thumbsignInRequest.setTransactionId(pathParts[3]);
         } else if (Action.REGISTER.equals(thumbsignInRequest.getAction())) {
-        	thumbsignInRequest.addQueryParam(USER_ID, pathParts[3]);
+        	/*Random rand = new Random();
+        	int rand_int = rand.nextInt(1000);
+        	String randomUserId = "OAuth"+rand_int;
+        	thumbsignInRequest.addQueryParam(USER_ID, randomUserId);*/
+        	String userId = "OAuth" + pathParts[3];
+        	thumbsignInRequest.addQueryParam(USER_ID, userId);
         }
         return thumbsignInRequest;
     }
@@ -139,6 +145,7 @@ public class ThumbsigninApiService {
         			setUserAuthenticationInContext(thumbsignin_UserId);
     			} else {
     				thumbsignInResponse.getData().put(REDIRECT_URL, registrationSuccessClientRedirectUrl);
+    				setUserAuthenticationInContext(thumbsignin_UserId);
     			}
             }
         	clearStatusRequestType();

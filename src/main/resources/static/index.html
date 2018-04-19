@@ -8,91 +8,75 @@
     <meta name="viewport" content="width=device-width"/>
     <base href="/"/>
     <link rel="stylesheet" type="text/css" href="/webjars/bootstrap/css/bootstrap.min.css"/>
-    <script type="text/javascript" src="/webjars/jquery/jquery.min.js"></script>
-    <script type="text/javascript" src="/webjars/bootstrap/js/bootstrap.min.js"></script>
-    <script src='https://thumbsignin.com/thumbsign_widget.js'></script>
+    <!--  <script type="text/javascript" src="/webjars/jquery/jquery.min.js"></script>
+    <script type="text/javascript" src="/webjars/bootstrap/js/bootstrap.min.js"></script>-->
+    <script src='https://stage.thumbsignin.com/thumbsign_widget.js'></script>
+    <!--  <script src="./thumbsign_widget.js"></script>-->
 </head>
 <body>
-    <h3>Thumbsignin OAuth 2.0 Authorization Server</h3>
-	<div class="container unauthenticated">
-    	<div>
-    		With Facebook: <a href="/login/facebook">click here</a>
-    	</div>
-    	<div>
-    		With Github: <a href="/login/github">click here</a>
+    <h3>ThumbSignIn OAuth 2.0 Identity Provider (IdP)</h3>
+    
+    <i>Login using your credentials to register for ThumbSignIn fingerprint login</i>
+    <form action="/loginPage.html">
+  		<!--  <div class="imgcontainer">
+    		<img src="img_avatar2.png" alt="Avatar" class="avatar">
+  		</div>-->
+
+  		<div class="container">
+    		<label for="uname"><b>Username</b></label>
+    		<input type="text" placeholder="Enter Username" name="uname" required><br>
+
+    		<label for="psw"><b>Password</b></label>
+    		<input type="password" placeholder="Enter Password" name="psw" required><br>
+        
+    		<button type="submit">Login</button>
+    		<!--  <label>
+      			<input type="checkbox" checked="checked" name="remember"> Remember me
+    		</label>-->
   		</div>
-  		<br>
-	</div>
-	<div class="container authenticated" style="display:none">
-    	Logged in as: <span id="user"></span>
-    	<div>
-    		<button onClick="logout()" class="btn btn-primary">Logout</button>
-  		</div>
-	</div>
+
+  		<!--  <div class="container" style="background-color:#f1f1f1">
+    		<button type="button" class="cancelbtn">Cancel</button>
+    		<span class="psw">Forgot <a href="#">password?</a></span>
+  		</div>-->
+	</form>
 	
-	<div><a href="/login/azuread">Click here if you have not yet registered with ThumbSignin</a></div> <br>
-	
-	<button class="ts-auth-button" id="tsBtn" 
+	<br><i>Click below link if you have already registered with ThumbSignIn</i><br>
+	<button class="ts-auth-button" id="LoginBtn" 
 		style="border: 1px solid rgb(72, 210, 160); background-color: rgb(72, 210, 160);">Login via ThumbSignin
 	</button>
     <script>
         (function(){document.write("<style>#tsBtn{color:#fff;border-radius:2px;background-color:#cccccc;width:230px;height:40px;margin-top: 20px;margin-left: 35;outline:0;border:1px solid #cccccc;cursor:pointer;font-size:16px;padding-left:30px;text-transform:none;background-position: 5px;background-image:url('https://thumbsignin.com/styles/img/logoIcon.png');background-repeat:no-repeat}</style>");})();
-    </script> 
-	<div id="widgetContainer"></div>
+    </script>
+    <div id="loginWidgetContainer"></div>
 	
-	<script type="text/javascript" src="/webjars/js-cookie/js.cookie.js"></script>
 	<script type="text/javascript">	
-    	$.get("/user", function(data) {
-        	//$("#facebookUser").html(data.userAuthentication.details.name);
-        	$("#user").html(data.userInfo.userName);
-        	$(".unauthenticated").hide()
-        	$(".authenticated").show()
-    	});
-    	var logout = function() {
-    	    /*$.post("/logout", function() {
-    	    	$("#facebookUser").html('');
-    	        $(".unauthenticated").show();
-    	        $(".authenticated").hide();
-    	    })
-    	    return true;*/
-    		$.ajax({
-    		    url: '/logout',   //url: '/j_spring_security_logout',
-    		    type: 'POST', 
-    		    beforeSend : function(xhr, settings) { 
-    		    	xhr.setRequestHeader("X-XSRF-TOKEN", Cookies.get('XSRF-TOKEN'));  //To be used in POST, PUT & DELETE relative URL requests
-    		    },
-    		    success: function() {
-    		    	$("#user").html('');
-        	        $(".unauthenticated").show();
-        	        $(".authenticated").hide();
-    		    }
-    		});
-    	}
-    	
-    	$(document).ready(function() {
-    	      thumbSignIn.addConfig('LOGIN_CONFIG', {
-    	              actionUrl: "/ts/secure/authenticate/",  
-    	              statusUrl: "/ts/secure/authStatus/"
-    	      });
-    		  thumbSignIn.init({
-    	              id:'tsLogin',
-    	              config: 'LOGIN_CONFIG',
-    	              container: 'widgetContainer'
-    	      }).then(function(){
-    	        //Add on click events
-    	        $('#tsBtn').click(function(){
-    	        	tsLogin.open()
-    	        });
-    	        $('#close').click(function(){
-    	        	tsLogin.close()
-    	        });
-    	     	// Post initialisation of the 'tsLogin' widget, u will be able to add event listeners
-    	        tsLogin.registerEvent('SUCCESS', function (response) {
-    	          window.location.hash = '';
-    	          window.location.pathname = response.redirectUrl;
-    	        });
-    	      })
-    	  })();
+	
+	(function() {
+	      thumbSignIn.addConfig('LOGIN_CONFIG', {
+	              actionUrl: "/ts/secure/authenticate",  
+	              statusUrl: "/ts/secure/authStatus/"
+	      });
+		  thumbSignIn.init({
+	              id:'tsLogin',
+	              config: 'LOGIN_CONFIG',
+	              container: 'loginWidgetContainer'
+	      }).then(function(){
+	        //Add on click events
+	        $('#LoginBtn').click(function(){
+	        	tsLogin.open()
+	        });
+	        $('#close').click(function(){
+	        	tsLogin.close()
+	        });
+		    // Post initialisation of the 'tsLogin' widget, u will be able to add event listeners
+	        tsLogin.registerEvent('SUCCESS', function (response) {
+	          window.location.hash = '';
+	          window.location.pathname = response.redirectUrl;
+	        });
+	   })
+	  })();
 	</script>
+    
 </body>
 </html>
