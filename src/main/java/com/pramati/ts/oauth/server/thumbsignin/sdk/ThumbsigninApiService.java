@@ -1,24 +1,12 @@
-package com.pramati.ts.oauth.server.service;
+package com.pramati.ts.oauth.server.thumbsignin.sdk;
 
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Random;
 
 import javax.servlet.http.HttpServletRequest;
 
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
-
-import com.pramati.thumbsignin.servlet.sdk.Action;
-import com.pramati.thumbsignin.servlet.sdk.ThumbsignInClient;
-import com.pramati.thumbsignin.servlet.sdk.ThumbsignInRequest;
-import com.pramati.thumbsignin.servlet.sdk.ThumbsignInResponse;
-import com.pramati.thumbsignin.servlet.sdk.ThumbsigninException;
-import com.pramati.thumbsignin.servlet.sdk.TransactionStatus;
 
 @Service
 public class ThumbsigninApiService {
@@ -29,12 +17,6 @@ public class ThumbsigninApiService {
 	//@Value("${client.registrationSuccess.redirect.url}")
     private String registrationSuccessClientRedirectUrl = "/ts/secure/registrationSuccess";
 	
-	//@Value("${client.accessDenied.redirect.url}")
-    //private String accessDeniedClientRedirectUrl;
-	
-	//@Autowired
-	//private AzureApiService azureApiService;
-	
 	private static String statusRequestType;
 	
 	private static final String STATUS = "Status";
@@ -43,13 +25,9 @@ public class ThumbsigninApiService {
 	
 	private static final String REDIRECT_URL = "redirectUrl";
 	
-	//private static final String USER_ID_QUERY_PARAM = "{userId}";
-	
 	private static final String USER_ID = "userId";
 	
 	private static final String CANCELLED = "cancelled";
-	
-	private static final String USER_NOT_FOUND_IN_AZURE_AD = "userRemovedFromAzureAD";
 	
 	private final ThumbsignInClient thumbsignInClient;
 
@@ -103,11 +81,7 @@ public class ThumbsigninApiService {
             }
             thumbsignInRequest.setTransactionId(pathParts[3]);
         } else if (Action.REGISTER.equals(thumbsignInRequest.getAction())) {
-        	/*Random rand = new Random();
-        	int rand_int = rand.nextInt(1000);
-        	String randomUserId = "OAuth"+rand_int;
-        	thumbsignInRequest.addQueryParam(USER_ID, randomUserId);*/
-        	String userId = "OAuth" + pathParts[3];
+        	String userId = "OAuth" + pathParts[3]; //Note: OAuth is appended just to identify that these are test users. This can be removed.
         	thumbsignInRequest.addQueryParam(USER_ID, userId);
         }
         return thumbsignInRequest;
@@ -127,21 +101,9 @@ public class ThumbsigninApiService {
     		if ((resp.getStatus() == 200) && (resp.getValue("userId") != null)) {                	
     			String thumbsignin_UserId = (String)resp.getValue("userId");
     			
-    			//List<Membership> listOfUserMemberships = new ArrayList<>();
-    			String userName = "";
     			if (statusRequestType.equals(AUTHENTICATION_STATUS)) {
-    				//listOfUserMemberships = azureApiService.getUserMembershipInfoFromGraph(thumbsignin_UserId);
-    				//userName = azureApiService.getUserNameByIdFromGraph(thumbsignin_UserId);
-    				//if (listOfUserMemberships == null || userName.equals(USER_NOT_FOUND_IN_AZURE_AD)) {
-    					//thumbsignInResponse.getData().put(USER_NOT_FOUND_IN_AZURE_AD, true);
-    					//thumbsignInResponse.getData().put(REDIRECT_URL, accessDeniedClientRedirectUrl);
-    				//} else {
-    					thumbsignInResponse.getData().put("userId", thumbsignin_UserId);
-        				//thumbsignInResponse.getData().put("userRolesFromAzure", listOfUserMemberships);
-        				//thumbsignInResponse.getData().put("userNameFromAzure", userName);
-        				thumbsignInResponse.getData().put(REDIRECT_URL, authSuccessClientRedirectUrl);
-        				//thumbsignInResponse.getData().put(REDIRECT_URL, authSuccessClientRedirectUrl.replace(USER_ID_QUERY_PARAM, thumbsignin_UserId));
-    				//}
+    				thumbsignInResponse.getData().put("userId", thumbsignin_UserId);
+        			thumbsignInResponse.getData().put(REDIRECT_URL, authSuccessClientRedirectUrl);
         			setUserAuthenticationInContext(thumbsignin_UserId);
     			} else {
     				thumbsignInResponse.getData().put(REDIRECT_URL, registrationSuccessClientRedirectUrl);
@@ -156,6 +118,9 @@ public class ThumbsigninApiService {
     	statusRequestType = "";
     }
     
+    /*
+     * After successful ThumbSignIn User Registration/Authentication process, we create a user session within the OAuth Server
+     */
     public void setUserAuthenticationInContext(String userId) {
     	UsernamePasswordAuthenticationToken authenticationToken = new UsernamePasswordAuthenticationToken(
     			userId, "N/A", null);

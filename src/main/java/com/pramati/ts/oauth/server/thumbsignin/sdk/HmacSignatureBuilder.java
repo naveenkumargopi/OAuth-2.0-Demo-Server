@@ -1,4 +1,4 @@
-package com.pramati.ts.oauth.server.security;
+package com.pramati.ts.oauth.server.thumbsignin.sdk;
 
 
 import org.apache.http.client.methods.HttpGet;

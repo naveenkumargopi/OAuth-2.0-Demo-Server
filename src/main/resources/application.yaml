@@ -1,3 +1,7 @@
+thumbsignin:
+  apiKey: 3322486d41784e19bd3b4faa526a76ed
+  apiSecret: 6d91efa1e5c882ea3ea4538c24517aaee200368f404b3e1fe9fc979f2b75c6c0
+
 #Manual client registration which will be used by OAuth 2.0 Authorization Server
 #This manual client registration needs to be replaced with proper Client Registration screen in the OAuth Server UI   
 security:
