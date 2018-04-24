@@ -7,7 +7,7 @@
     <meta name="description" content=""/>
     <meta name="viewport" content="width=device-width"/>
     <base href="/"/>
-    <link rel="stylesheet" type="text/css" href="./bootstrap.min.css" />
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.0/css/bootstrap.min.css" integrity="sha384-9gVQ4dYFwwWSjIDZnLEWnxCjeSWFphJiwGPXr1jddIhOegiu1FwO5qRGvFXOdJZ4" crossorigin="anonymous">
     <!--  <script src='https://stage.thumbsignin.com/thumbsign_widget.js'></script>-->
     <script src="./thumbsign_widget.js"></script>
     
@@ -25,13 +25,14 @@
             color: #4CAF50;
             margin-bottom: 30px;
         }        
-                button.ts-auth-button {
+        button.ts-auth-button {
             background-color: #ffc23a;
         }
         .or-divider {
             display: flex;
             align-items: center;
             padding: 5px 20px;
+            margin-top: 20px;
         }        
         .or-divider span {
             flex-grow: 1;
@@ -43,6 +44,13 @@
         }        
         .or-divider span:last-child {
             margin-left: 10px;
+        }
+        form {
+        max-width: 400px;
+margin: auto;
+        }
+        form label {
+        margin-right: 20px;
         }
     </style>
 </head>
@@ -56,13 +64,13 @@
         <form action="/loginPage.html">
             <div class="form-group row">
                 <label for="uname" class="col-sm-2 col-form-label text-left">Username</label>
-                <div class="col-sm-10">
+                <div class="col-sm-12">
                     <input type="text" required name="uname" placeholder="Enter Username" class="form-control">
                 </div>
             </div>
             <div class="form-group row">
                 <label for="pwd" class="col-sm-2 col-form-label text-left">Password</label>
-                <div class="col-sm-10">
+                <div class="col-sm-12">
                     <input type="password" name="pwd" required class="form-control" placeholder="Password">
                 </div>
             </div>
