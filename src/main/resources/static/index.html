@@ -7,7 +7,7 @@
     <meta name="description" content=""/>
     <meta name="viewport" content="width=device-width"/>
     <base href="/"/>
-    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.0/css/bootstrap.min.css" integrity="sha384-9gVQ4dYFwwWSjIDZnLEWnxCjeSWFphJiwGPXr1jddIhOegiu1FwO5qRGvFXOdJZ4" crossorigin="anonymous">
+    <link rel="stylesheet" href="./bootstrap.min.css">
     <!--  <script src='https://stage.thumbsignin.com/thumbsign_widget.js'></script>-->
     <script src="./thumbsign_widget.js"></script>
     
@@ -84,15 +84,15 @@ margin: auto;
 
         <br>
         <div>Click below link if you have already registered with ThumbSignIn</div><br>
-        <button class="btn ts-auth-button" id="LoginBtn">
+        <!--  <button class="btn ts-auth-button" id="LoginBtn">
 			Login via ThumbSignin
-		</button>
+		</button> -->
     </div>
-    <script>
+    <!--  <script>
         (function() {
             document.write("<style>#LoginBtn{color:#fff;border-radius:2px;background-color:#cccccc;width:230px;height:40px;margin-top: 20px;margin-left: 35;outline:0;border:1px solid #cccccc;cursor:pointer;font-size:16px;padding-left:30px;text-transform:none;background-position: 5px;background-image:url('https://thumbsignin.com/styles/img/logoIcon.png');background-repeat:no-repeat}</style>");
         })();
-    </script>
+    </script>-->
     <div id="loginWidgetContainer"></div>
 
     <script type="text/javascript">
@@ -107,9 +107,10 @@ margin: auto;
                 container: 'loginWidgetContainer'
             }).then(function() {
                 //Add on click events
-                $('#LoginBtn').click(function() {
+                //$('#LoginBtn').click(function() {
+                	console.log("click");
                     tsLogin.open()
-                });
+                //});
                 $('#close').click(function() {
                     tsLogin.close()
                 });
