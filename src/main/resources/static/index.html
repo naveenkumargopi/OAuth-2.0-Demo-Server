@@ -61,7 +61,7 @@ margin: auto;
 
         <div class="ui-title">Login using your credentials to register for ThumbSignIn fingerprint login</div>
 
-        <form action="/loginPage.html">
+        <form action="/landingPage.html">
             <div class="form-group row">
                 <label for="uname" class="col-sm-2 col-form-label text-left">Username</label>
                 <div class="col-sm-12">
@@ -83,7 +83,7 @@ margin: auto;
         </div>
 
         <br>
-        <div>Click below link if you have already registered with ThumbSignIn</div><br>
+        <div>Click below link if you have already registered with ThumbSignIn</div>
         <!--  <button class="btn ts-auth-button" id="LoginBtn">
 			Login via ThumbSignin
 		</button> -->
@@ -99,7 +99,8 @@ margin: auto;
         (function() {
             thumbSignIn.addConfig('LOGIN_CONFIG', {
                 actionUrl: "/ts/secure/authenticate",
-                statusUrl: "/ts/secure/authStatus/"
+                statusUrl: "/ts/secure/authStatus/",
+                DEEP_LINK: "Login via ThumbSignin"
             });
             thumbSignIn.init({
                 id: 'tsLogin',

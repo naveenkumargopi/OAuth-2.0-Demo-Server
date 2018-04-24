@@ -28,8 +28,8 @@
                 <div id="qrcode" class="qrcode ts-qrcode">
                     <div data-type="mobile" class="hidden">
                         <div>
-                            <img id="openApp" class="open-app-icon ts-app-icon" src="${url}/styles/img/icon_old.png"/>
-                            <div class="open-app ts-app-link"><a class="deeplink" target="_blank" href="#"></a></div>
+                            <img id="openApp" class="open-app-icon ts-app-icon" src=""/>
+                            <div class="open-app ts-app-link"> <a class="deeplink" target="_blank" href="#"></a></div>
                         </div>
                     </div>
                     <div data-type="desktop" class="hidden">
@@ -84,9 +84,9 @@
             'REFRESH_MSG': "Click on refresh icon <br/> and try again.",
             'switch-msg': "Show on App",
             'INTRO_MSG"': "",
-            'TOGGLE_MSG1': "Have app on a different phone?",
-            'TOGGLE_MSG2': "Show QR Code",
-            'INITIATED': "QR Code Scanned."
+            'TOGGLE_MSG1': "",
+            'TOGGLE_MSG2': "",
+            'INITIATED': "Authentication Initiated."
         }
     }
 
@@ -689,16 +689,18 @@
                     //status === "COMPLETED_FAILURE"
                     if (res.failureReason) {
                         if (res.failureReason === 'TIMEOUT') {
-                            _this.DOM.find('#intro_msg')
-                                .text(resource.isMobile ? resource.config.mobile['TIMEOUT'] : resource.config.desktop['TIMEOUT']);
+                            /*_this.DOM.find('#intro_msg')
+                                .text(resource.isMobile ? resource.config.mobile['TIMEOUT'] : resource.config.desktop['TIMEOUT']);*/
+                        	_this.refresh();
                         } else {
                             _this.DOM.find('#intro_msg')
                                 .text(resource.config[res.failureReason] || res.failureReason);
+                            _this.DOM.find('.circle-loader').hide();
+                            _this.DOM.find('.ts-timeout').fadeIn(function () {
+                                _this.DOM.find('#qrcode').css('opacity', '1');
+                            });
                         }
-                        _this.DOM.find('.circle-loader').hide();
-                        _this.DOM.find('.ts-timeout').fadeIn(function () {
-                            _this.DOM.find('#qrcode').css('opacity', '1');
-                        });
+                        
                     }
                 }
 

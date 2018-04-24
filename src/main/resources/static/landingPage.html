@@ -32,24 +32,18 @@
 <body>
     <div class="container-fluid p-2 ui-wrapper text-center">
         <h3>ThumbSignIn OAuth 2.0 Identity Provider (IdP)</h3>
-        <div class="ui-title">Welcome! You have logged in using your credentials!</div><br><br>
+        <div class="ui-title">Welcome! You have logged in using your credentials!</div>
         
-        <button class="btn ts-auth-button" id="RegisterBtn">Click here to register with ThumbSignin
-		</button>
     </div>
-    
-    <script>
-        (function() {
-            document.write("<style>#RegisterBtn{color:#fff;border-radius:2px;background-color:#cccccc;width:230px;height:40px;margin-top: 20px;margin-left: 35;outline:0;border:1px solid #cccccc;cursor:pointer;font-size:16px;padding-left:30px;text-transform:none;background-position: 5px;background-image:url('https://thumbsignin.com/styles/img/logoIcon.png');background-repeat:no-repeat}</style>");
-        })();
-    </script>
+   
     <div id="registerWidgetContainer"></div>
 
     <script type="text/javascript">
         (function() {
             thumbSignIn.addConfig('REGISTER_CONFIG', {
                 actionUrl: "/ts/secure/register/" + getQueryParam("uname"),
-                statusUrl: "/ts/secure/regStatus/"
+                statusUrl: "/ts/secure/regStatus/",
+                DEEP_LINK: "Register via ThumbSignin"
             });
             thumbSignIn.init({
                 id: 'tsRegister',
@@ -57,13 +51,18 @@
                 container: 'registerWidgetContainer'
             }).then(function() {
                 //Add on click events
-                $('#RegisterBtn').click(function() {
+                //$('#RegisterBtn').click(function() {
                     tsRegister.open()
-                });
+                //});
                 $('#close').click(function() {
                     tsRegister.close()
                 });
                 // Post initialisation of the 'tsRegister' widget, u will be able to add event listeners
+                tsRegister.registerEvent('SUCCESS', function(response) {
+                    window.location.hash = '';
+                    window.location.pathname = response.redirectUrl;
+                });
+                
                 tsRegister.registerEvent('SUCCESS', function(response) {
                     window.location.hash = '';
                     window.location.pathname = response.redirectUrl;

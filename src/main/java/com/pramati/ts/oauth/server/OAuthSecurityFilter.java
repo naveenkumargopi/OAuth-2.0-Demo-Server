@@ -45,7 +45,7 @@ public class OAuthSecurityFilter extends WebSecurityConfigurerAdapter {
 	      .csrf().disable() //To disable CSRF which is enabled by default by spring security
 	      .antMatcher("/**")  //All requests are protected by default
 	        .authorizeRequests()
-	           .antMatchers("/", "/login**", "/ts/**", "/thumbsign_widget.js","/bootstrap.min.css", "/webjars/**").permitAll()  //The home(index) page, login and ts endpoints are explicitly excluded
+	           .antMatchers("/", "/login**","/landingPage**", "/ts/**", "/thumbsign_widget.js","/bootstrap.min.css", "/webjars/**").permitAll()  //The home(index) page, login and ts endpoints are explicitly excluded
 	           .anyRequest().authenticated()  //All other endpoints require an authenticated user
 	        .and().exceptionHandling().authenticationEntryPoint(new LoginUrlAuthenticationEntryPoint("/"))  //Unauthenticated users are re-directed to the home page	        
 	        .and().logout().logoutSuccessUrl("/").permitAll()
