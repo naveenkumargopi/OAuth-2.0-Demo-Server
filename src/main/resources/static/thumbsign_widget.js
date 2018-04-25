@@ -29,7 +29,7 @@
                     <div data-type="mobile" class="hidden">
                         <div>
                             <img id="openApp" class="open-app-icon ts-app-icon" src="${url}/styles/img/icon_old.png" style="display:none;"/>
-                            <div class="open-app ts-app-link"> <a class="deeplink" target="_blank" href="#"></a></div>
+                            <div class="open-app ts-app-link"> <a class="btn deeplink" target="_blank" href="#"></a></div>
                         </div>
                     </div>
                     <div data-type="desktop" class="hidden">
