@@ -42,7 +42,7 @@
                     </div>
                 </div>
             </div>
-            <div class="intro-conatiner ts-intro-conatiner">
+            <div class="intro-conatiner ts-intro-conatiner" style="margin-top:30px">
                 <p id="intro_msg" class="intro_msg ts-intro-msg"/>
                 <p id="toggle_view ts-toggle-view" style="display:none;">
                     <div id="toggle_view_text" class="toggle_view_text"></div>
@@ -156,7 +156,7 @@
                 url: 'https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js'
             },
             'style': {
-                url: `${data.rootURL}/thumbsignin_widget.css`
+                url: './thumbsignin_widget.css'
             }
         }
         if (file && typeof file == "string") {
