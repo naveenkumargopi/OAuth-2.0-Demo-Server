@@ -20,6 +20,7 @@ This IDP server can now be accessed locally via the URL: `http://localhost:8080`
 
 Note: This IDP server has already been deployed in a test environment and can be accessed using URL `https://idp-stage.thumbsignin.com/`
 
+
 ## IDP Endpoints and Client Credentials
 
 Authorization Endpoint: `<server_name>/oauth/authorize` (for e.g., `https://idp-stage.thumbsignin.com/oauth/authorize`)
