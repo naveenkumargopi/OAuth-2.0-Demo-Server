@@ -18,13 +18,16 @@ Step 2: Go to {project folder}/target and run below command:
 
 This IDP server can now be accessed locally via the URL: `http://localhost:8080`
 
+Note: This IDP server has already been deployed in a test environment and can be 
+accessed using URL `https://idp-stage.thumbsignin.com/`
+
 ## IDP Endpoints and Client Credentials
 
-Authorization Endpoint: `http://localhost:8080/oauth/authorize`
+Authorization Endpoint: `<server_name>/oauth/authorize` (for e.g., `https://idp-stage.thumbsignin.com/oauth/authorize`)
 
-Token Endpoint: `http://localhost:8080/oauth/token`
+Token Endpoint: `<server_name>/oauth/token`
 
-Resource Endpoint: `http://localhost:8080/me`
+Resource Endpoint: `<server_name>/me`
 
 This sample IDP project supports only the below Client credentials. 
 
