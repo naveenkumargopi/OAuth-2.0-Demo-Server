@@ -300,7 +300,7 @@ p.icons {
 }
 
 .circle-loader {
-    margin: 40px 0 30px -15px;
+    margin: 40px auto;
     border: 2px solid rgba(0, 0, 0, .2);
     border-left-color: #5cb85c;
     animation-name: loader-spin;
@@ -308,7 +308,6 @@ p.icons {
     animation-iteration-count: infinite;
     animation-timing-function: linear;
     display: inline-block;
-    vertical-align: top
 }
 
 .circle-loader,
@@ -344,9 +343,9 @@ p.icons {
     border-right: 2px solid #5cb85c;
     border-top: 2px solid #5cb85c;
     content: '';
-    left: 6em;
-    top: 7em;
-    position: absolute
+    left: 38%;
+    top: 48%;
+    position: absolute;
 }
 .hidden{
     display: none;
@@ -360,7 +359,8 @@ p.icons {
         width: 95%
     }
     .checkmark:after {
-        left: 9.5em;
+        left: 40%;
+        top: 50%;
     }
     .closeIcon {
         right: 5px;
